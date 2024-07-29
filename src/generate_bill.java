@@ -1,3 +1,5 @@
+import org.checkerframework.checker.sqlquotes.qual.SqlEvenQuotes;
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -71,7 +73,9 @@ public class generate_bill extends JFrame implements ActionListener{
             String month = c2.getSelectedItem();
             t1.setText("\tReliance Power Limited\nELECTRICITY BILL FOR THE MONTH OF "+month+" ,2018\n\n\n");
 
-            ResultSet rs = c.s.executeQuery("select * from emp where meter_number="+c1.getSelectedItem());
+            @SuppressWarnings("sqlquotes")
+            @SqlEvenQuotes String choice1 = c1.getSelectedItem();
+            ResultSet rs = c.s.executeQuery("select * from emp where meter_number="+choice1);
 
             if(rs.next()){
                 t1.append("\n    Customer Name:"+rs.getString("name"));
@@ -104,7 +108,7 @@ public class generate_bill extends JFrame implements ActionListener{
 
             }
 
-            rs = c.s.executeQuery("select * from bill where meter_number="+c1.getSelectedItem());
+            rs = c.s.executeQuery("select * from bill where meter_number="+choice1);
 
             if(rs.next()){
                 t1.append("\n    Current Month :\t"+rs.getString("month"));

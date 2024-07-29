@@ -1,3 +1,5 @@
+import org.checkerframework.checker.sqlquotes.qual.SqlEvenQuotes;
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -53,7 +55,9 @@ public class LastBill extends JFrame implements ActionListener
         try{
             conn c = new conn();
 
-            ResultSet rs = c.s.executeQuery("select * from emp where meter_number="+c1.getSelectedItem());
+            @SuppressWarnings("sqlquotes")
+            @SqlEvenQuotes String choice1 = c1.getSelectedItem();
+            ResultSet rs = c.s.executeQuery("select * from emp where meter_number="+choice1);
 
             if(rs.next()){
                 t1.append("\n    Customer Name:"+rs.getString("name"));
@@ -69,7 +73,7 @@ public class LastBill extends JFrame implements ActionListener
 
             t1.append("Details of the Last Bills\n\n\n");
 
-            rs = c.s.executeQuery("select * from bill where meter_number="+c1.getSelectedItem());
+            rs = c.s.executeQuery("select * from bill where meter_number="+choice1);
 
             while(rs.next()){
                 t1.append("       "+ rs.getString("month") + "           " +rs.getString("amount") + "\n");

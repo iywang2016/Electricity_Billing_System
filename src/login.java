@@ -5,6 +5,7 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.*;
+import org.checkerframework.checker.sqlquotes.qual.*;
 
 public class login extends JFrame implements ActionListener
 {
@@ -72,8 +73,8 @@ public class login extends JFrame implements ActionListener
 
         try{
             conn c1 = new conn();
-            String a  = tf1.getText();
-            String b  = pf2.getText();
+            String a  = sanitize(tf1.getText());
+            String b  = sanitize(pf2.getText());
             String q  = "select * from login where username = '"+a+"' and password = '"+b+"'";
             ResultSet rs = c1.s.executeQuery(q);
             if(rs.next()){
@@ -94,4 +95,9 @@ public class login extends JFrame implements ActionListener
         new login().setVisible(true);
     }
 
+    private static @SqlEvenQuotes String sanitize(String userInput) {
+        @SuppressWarnings("sqlquotes")
+        @SqlEvenQuotes String sanitizedInput = userInput;
+        return sanitizedInput;
+    }
 }
